@@ -5,11 +5,13 @@ public class MenuBehavior : MonoBehaviour {
 
 	public Transform rotatePoint;
 	private bool initialized = false;
+	public string name;
 
 
 	// Use this for initialization
 	void Start () {
-		rotatePoint = GameObject.FindGameObjectWithTag ("RotatePoint").transform;
+		rotatePoint = GameObject.FindGameObjectWithTag ("Menu").transform;
+		transform.LookAt (GameObject.FindGameObjectWithTag ("MainCamera").transform);
 	}
 	
 	// Update is called once per frame
@@ -29,7 +31,7 @@ public class MenuBehavior : MonoBehaviour {
 					for (int i = 0; i < parent.childCount; i++) 
 						if (parent.GetChild (i) != transform) 
 							for (int j = 0; j < parent.GetChild (i).childCount; j++) 
-								parent.GetChild (i).GetChild (j).gameObject.SetActive (false);
+								deactivateAllChildren(parent.GetChild(i).GetChild(j));
 				}
 
 				if (transform.childCount > 0) 
@@ -50,5 +52,15 @@ public class MenuBehavior : MonoBehaviour {
 				}
 			}
 		}
+	}
+
+	void deactivateAllChildren(Transform node)
+	{
+		for (int i = 0; i < node.childCount; i++) 
+		{
+			deactivateAllChildren (node.GetChild (i));
+		}
+
+		node.gameObject.SetActive (false);
 	}
 }
